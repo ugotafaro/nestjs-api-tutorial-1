@@ -2,12 +2,9 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
-import { User } from 'schemas/user.schemas';
-import { MongoServerError } from 'mongodb';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
-import { ObjectId } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable({})
@@ -19,7 +16,9 @@ export class AuthService {
   ) {}
   async signup(dto: AuthDto) {
     try {
+      console.log('dto', dto);
       //generate the password hash
+
       const hash = await argon.hash(dto.password);
       // save the new user in the db
       const user = await this.prisma.user.create({
